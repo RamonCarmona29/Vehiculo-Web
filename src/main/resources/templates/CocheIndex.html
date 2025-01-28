@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+    <body layout:fragment="body">            
+
+        <div class="container">
+
+            <form th:action="@{/coche}" method="post" th:object="${cocheBusqueda}">
+                <p></p>
+                <h4>Busqueda</h4>
+
+                <div class="row pb-3 justify-content-center">
+                    
+                    <div class="col-md-1 align-self-center">
+                        <a th:href="@{/coche/modify/{IdCoche}(IdCoche=0)}" class="btn btn-success"><i class="bi bi-person-fill-add"></i></a>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label for="lblNombre" class="form-label">Introduce la placa </label>
+                        <input type="text" class="form-control" id="txtplaca" placeholder="Placa" th:field="*{placa}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="lblNombre" class="form-label">Introduce el modelo </label>
+                        <input type="text" class="form-control" id="txtplaca" placeholder="Modelo" th:field="*{modelo}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Agencia</label>
+                        <select class="form-select form-select-sm" aria-label="Selecciona tu Agencia" th:field="*{Agencia.idAgencia}">
+                            <option value="0">Selecciona tu Agencia</option>
+                            <option th:each="agencia : ${agencias}" 
+                                    th:value="${agencia.idAgencia}" 
+                                    th:text="${agencia.nombre}">
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" th:field="*{status}" value="2" id="rdInactivo">
+                            <label class="form-check-label" for="rdInactivo">Todos</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" th:field="*{status}" value="1" id="rdActivo" checked>
+                            <label class="form-check-label" for="rdActivo">Activo</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" th:field="*{status}" value="0" id="rdActivo" checked>
+                            <label class="form-check-label" for="rdActivo">Inactivo</label>
+                        </div>
+                    </div>  
+
+                    <div class="col-md-1 align-self-center">
+                        <button type="submit" class="btn btn-dark">
+                            <i class="bi bi-binoculars-fill"></i> 
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!--</div>-->
+
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                <th>Id</th>
+                <th>Status</th>
+                <th>VIN</th>
+                <th>Placa</th>
+                <th>Modelo</th>
+                <th>Agencia</th>
+
+                <th>Opciones</th>
+                </thead>
+                <tbody class="fw-lighter">
+                    <tr th:each="coche : ${Coche}">
+
+                        <td th:text="${coche.IdCoche}"></td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       th:value="${coche.IdCoche}"
+                                       th:checked="${coche.Status == 1}"
+                                       onchange="SwitchChange(this.value, this.checked)">
+                            </div>
+                        </td>
+                        <td th:text="${coche.Vin}"></td>
+                        <td th:text="${coche.Placa}"></td>
+                        <td th:text="${coche.Modelo}"></td>
+                        <td th:text="${coche.Agencia.Nombre}"></td>
+
+                        <td><a th:href="@{/coche/modify/{IdCoche}(IdCoche=${coche.IdCoche})}" class="btn btn-warning text-center"><i class="bi bi-pencil-square"></i></a>
+
+                            <form th:action="@{/coche/delete/{IdCoche}(IdCoche=${coche.IdCoche})}" method="post">
+                                <button type="submit" class="btn btn-danger text-center"><i class="bi bi-trash3-fill"></i></button>
+                            </form>
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <script>
+
+            function SwitchChange(idCoche, isChecked) {
+
+                $.ajax({
+                    url: "/coche/UpdateStatus",
+                    datatype: "JSON",
+                    type: "GET",
+                    data: {idCoche, isChecked},
+                    success: function (result) {
+                        if (result.correct) {
+                        }
+                    },
+                    error: function () {
+                        console.log("Error");
+                    }
+                }
+                );
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <head>
+        <style>
+            .rounded-input {
+                border: 2px solid #3498db;
+                border-radius: 20px;
+                padding: 12px;
+                width: 300px;
+            }
+            
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #7f8c8d ;
+                margin: 0;
+                padding: 20px;
+            }
+            
+            form {
+                background-color: #fff;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </head>
+
+
+    <body layout:fragment="body">
+
+        <div class="container">
+            <p></p>
+            <h2>Bienvenido Usuario</h2>
+
+            <form th:action="@{/coche/form}" method="post" th:object="${Coche}" enctype="multipart/form-data">
+                <input type="hidden" th:field="*{IdCoche}">
+
+
+                <div class="row pb-3">
+
+                    <div class="col-md-3 col-sm-12">
+                        <label class="form-label">Inserta tu Agencia</label>
+                        <select class="form-select form-select-sm" aria-label="Selecciona tu Agencia" th:field="*{Agencia.idAgencia}">
+                            <option value="0">Selecciona tu Agencia</option>
+                            <option th:each="agencia : ${agencias}" 
+                                    th:value="${agencia.idAgencia}" 
+                                    th:text="${agencia.nombre}">
+                            </option>
+                        </select>
+                        <span class="text-danger" th:if="${#fields.hasErrors('Agencia.idAgencia')}" th:errors="*{Agencia.idAgencia}"></span>
+                    </div>
+
+                    <div class="col-md-4 ms-auto">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" th:field="*{Status}" value="0" id="rdInactivo">
+                            <label class="form-check-label" for="rdInactivo">Inactivo</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" th:field="*{Status}" value="1" id="rdActivo" checked>
+                            <label class="form-check-label" for="rdActivo">Activo</label>
+                        </div>
+                    </div>  
+
+                </div>
+
+
+                <div class="row pb-3">
+                    <div class="col-md-4 col-sm-12">
+                        <label for="lblNombre" class="form-label">Introduce tu VIN</label>
+                        <input type="text" class="form-control  rounded-input" id="txtVin" placeholder="VIN" th:field="*{Vin}">
+                        <!--<span class="text-danger" th:if="${VinError}" th:text="${VinError}"></span>-->
+                        <span class="text-danger" th:if="${#fields.hasErrors('Vin')}" th:errors="*{Vin}"></span>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                        <label for="lblNombre" class="form-label">Introduce tu Placa</label>
+                        <input type="text" class="form-control  rounded-input" id="txtVin" placeholder="Placa" th:field="*{Placa}">
+                        <span class="text-danger" th:if="${#fields.hasErrors('Placa')}" th:errors="*{Placa}"></span>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                        <label for="lblNombre" class="form-label">Introduce tu Modelo</label>
+                        <input type="text" class="form-control  rounded-input" id="txtVin" placeholder="Modelo" th:field="*{Modelo}">
+                        <span class="text-danger" th:if="${#fields.hasErrors('Modelo')}" th:errors="*{Modelo}"></span>
+                    </div>
+                </div>
+
+                <p></p>
+
+                <div class="row pb-3">
+                    <div class="col-md-2">
+                        <button th:text="*{IdCoche == 0 ? 'Agregar' : 'Actualizar'}" type="submit" class="btn btn-outline-dark"></button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+        <script>
+
+        </script>
+    </body>
+</html>
